@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "59294274574",
+    "firebase_url": "https://lafloria-e0b36.firebaseio.com",
+    "project_id": "lafloria-e0b36",
+    "storage_bucket": "lafloria-e0b36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59294274574:android:0d311c2b3a44533e",
+        "android_client_info": {
+          "package_name": "com.iso.developer.lafloria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59294274574-siv1qr6ujiabub320ljoed9cd16vheev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iso.developer.lafloria",
+            "certificate_hash": "445091FDF99B03932A0BA1FA6887F325B7F5E541"
+          }
+        },
+        {
+          "client_id": "59294274574-hqrc71hf9kr7is7ajjghn1ps6lbucpfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkF6JWAfjkwt3uBw21TXK29ANyg3a9hys"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "59294274574-hqrc71hf9kr7is7ajjghn1ps6lbucpfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

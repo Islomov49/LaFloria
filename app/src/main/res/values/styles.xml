@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:typeface">serif</item>
+        <item name="colorPrimary">@color/pureWhite</item>
+        <item name="colorPrimaryDark">@color/greyWhite</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:typeface">serif</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/greyNormSecondary</item>
+        <item name="textAllCaps" >false</item>
+    </style>
+</resources>

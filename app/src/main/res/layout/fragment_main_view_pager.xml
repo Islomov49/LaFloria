@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.iso.developer.lafloria.fragments.MainViewPagerFragment">
+
+
+
+
+    <com.iso.developer.lafloria.utils.CustomTabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/greyNorm"
+        app:tabBackground="@color/pureWhite"
+        android:background="@color/pureWhite"
+        app:tabGravity="center"
+        app:tabTextAppearance="@style/MineCustomTabText"
+        app:tabMode="scrollable"
+        app:tabIndicatorHeight="0px"
+        app:tabContentStart="16dp"
+        app:tabSelectedTextColor="#414141"
+        app:tabPaddingStart="0dp"
+        app:tabPaddingEnd="30dp"
+        />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sliding_tabs"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:src="@drawable/white_gradient"
+        />
+</FrameLayout>
