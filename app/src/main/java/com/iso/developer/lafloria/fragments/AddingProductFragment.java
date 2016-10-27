@@ -10,14 +10,6 @@ import android.view.ViewGroup;
 
 import com.iso.developer.lafloria.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddingProductFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddingProductFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddingProductFragment extends Fragment {
 
 
@@ -36,7 +28,12 @@ public class AddingProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_adding_product, container, false);
+        view.findViewById(R.id.mainAddingView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         return view;
     }
 

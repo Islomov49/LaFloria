@@ -7,6 +7,10 @@
     <string name="closeDrawer">Close</string>
     <string name="settings">Settings</string>
     <string name="name_of_product">Name of product</string>
-    <string name="ammount_bouquet">Ammount bouquet</string>
-    <string name="type_bouquete">Type bouquete</string>
+    <string name="ammount_bouquet">Ammount</string>
+    <string name="type_bouquete">Type</string>
+    <string name="bouqete">Bouqete</string>
+    <string name="romantic">Romantic</string>
+    <string name="serviceies">Services</string>
+    <string name="time_of_delivery">Time of delivery</string>
 </resources>

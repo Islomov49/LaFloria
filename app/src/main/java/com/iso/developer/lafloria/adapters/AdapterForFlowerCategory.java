@@ -1,6 +1,8 @@
 package com.iso.developer.lafloria.adapters;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iso.developer.lafloria.FloriaActivity;
 import com.iso.developer.lafloria.R;
 import com.iso.developer.lafloria.datamoduls.CardDataCategoryModule;
+import com.iso.developer.lafloria.fragments.AddingProductFragment;
+import com.iso.developer.lafloria.fragments.MainViewPagerFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,7 +27,7 @@ import static com.iso.developer.lafloria.utils.BitmapUtils.*;
 
 public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlowerCategory.ViewHolder>{
         List<CardDataCategoryModule> mDataset;
-    Context This;
+    Context context;
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -30,18 +35,20 @@ public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlo
             // each data item is just a string in this case
             public TextView mTextView;
             public ImageView mPhoto;
+            public View mainView;
             public ViewHolder(View v) {
                 super(v);
                 mTextView=(TextView) v.findViewById(R.id.themee);
                 mPhoto=(ImageView) v.findViewById(R.id.photo);
-
+                mainView=v.findViewById(R.id.mainCardView);
             }
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
         public AdapterForFlowerCategory(List<CardDataCategoryModule> myDataset, Context A1) {
             mDataset = myDataset;
-            This=A1;
+
+            context=A1;
         }
 
         // Create new views (invoked by the layout manager)
@@ -64,24 +71,21 @@ public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlo
             // - replace the contents of the view with that element
             final CardDataCategoryModule item=mDataset.get(position);
             holder.mTextView.setText(item.getNameOfCategory());
-                Picasso.with(This)
-                        .load(R.drawable.temp).resize(dpToPx(200,This),dpToPx(200,This)).centerCrop()
+                Picasso.with(context)
+                        .load(R.drawable.temp).resize(dpToPx(200,context),dpToPx(200,context)).centerCrop()
                         .into(holder.mPhoto);
-//
-//            holder.mPhoto.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent aaaa=new Intent(This,Main2Activity.class);
-//                    aaaa.putExtra("texttt",A12.getTexte());
-//                    aaaa.putExtra("themmee",A12.getThemee());
-//                    aaaa.putExtra("phhhooto",A12.getPhotoUri());
-//                    aaaa.putExtra("uriiaudio",A12.getAudioUri());
-//                    aaaa.putExtra("isfake",false);
-//                    This.startActivity(aaaa);
-//
-//                }
-//            });
-//            Log.d("xxxx",A12.getPhotoUri());
+            holder.mainView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = ((FloriaActivity)context).getSupportFragmentManager();
+                    fragmentManager
+                            .beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .addToBackStack(null)
+                            .add(R.id.continer, new AddingProductFragment())
+                            .commit();
+                }
+            });
         }
 
             // Return the size of your dataset (invoked by the layout manager)

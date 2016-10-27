@@ -3,17 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.iso.developer.lafloria.fragments.AddingProductFragment">
-   <FrameLayout
-       android:layout_width="match_parent"
-       android:layout_height="2px"
-       android:background="#ececec"
-       />
+    android:background="#fff"
+    android:id="@+id/mainAddingView"
+       tools:context="com.iso.developer.lafloria.fragments.AddingProductFragment">
+
    <ImageView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:src="@drawable/ic_add_a_photo_black_48dp"
-
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
        />
    <FrameLayout
        android:layout_width="match_parent"
@@ -21,9 +20,44 @@
        android:background="#ececec"
        android:layout_marginBottom="10dp"
        />
+   <RadioGroup
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:checkedButton="@+id/rbBouqete"
+       android:orientation="horizontal">
+      <RadioButton
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_marginLeft="16dp"
+          android:layout_height="wrap_content"
+          android:text="@string/bouqete"
+          android:id="@+id/rbBouqete"
+          />
+      <RadioButton
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:text="@string/romantic"
+          android:id="@+id/rbRomantic"/>
+      <RadioButton
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:text="@string/serviceies"
+          android:layout_marginRight="16dp"
+          android:id="@+id/rbService"/>
+   </RadioGroup>
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="2px"
+
+       android:layout_marginTop="10dp" android:background="#ececec"
+       />
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
        >
       <TextView
           android:layout_width="wrap_content"
@@ -48,8 +82,69 @@
           android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"
           android:id="@+id/etNameProduct"
-          android:layout_toRightOf="@+id/tvproductName"
-          android:layout_toEndOf="@+id/tvproductName" />
+          />
+   </RelativeLayout>
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/ammount_bouquet"
+          android:textSize="16dp"
+          android:textColor="@color/glavniy_cherniy"
+          android:layout_marginLeft="16dp"
+          android:gravity="center_vertical"
+          android:layout_alignBottom="@+id/etAmmount"
+          android:layout_alignTop="@+id/etAmmount"
+          android:id="@+id/tvAmmount" />
+      <EditText
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:hint="(integer)"
+          android:inputType="number"
+          android:gravity="right"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true"
+          android:id="@+id/etAmmount"
+          />
+
+   </RelativeLayout>
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/time_of_delivery"
+          android:textSize="16dp"
+          android:textColor="@color/glavniy_cherniy"
+          android:layout_marginLeft="16dp"
+          android:gravity="center_vertical"
+          android:layout_alignBottom="@+id/tpTimerPickerDeleivry"
+          android:layout_alignTop="@+id/tpTimerPickerDeleivry"
+          android:id="@+id/tvTimePick" />
+      <EditText
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="16dp"
+          android:hint="(hh:mm)"
+          android:focusableInTouchMode="false"
+          android:inputType="number"
+          android:gravity="right"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true"
+          android:id="@+id/tpTimerPickerDeleivry"
+          />
+
    </RelativeLayout>
    <RelativeLayout
        android:layout_width="match_parent"
@@ -78,38 +173,7 @@
           android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"
           android:id="@+id/spTypeOfAdding"
-          android:layout_toRightOf="@+id/tvTypeChoose"
-          android:layout_toEndOf="@+id/tvTypeChoose" />
+          />
    </RelativeLayout>
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginBottom="5dp">
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/ammount_bouquet"
-          android:textSize="16dp"
-          android:textColor="@color/glavniy_cherniy"
-          android:layout_marginLeft="16dp"
-          android:gravity="center_vertical"
-          android:layout_alignBottom="@+id/etAmmount"
-          android:layout_alignTop="@+id/etAmmount"
-          android:id="@+id/tvAmmount" />
-      <EditText
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="10dp"
-          android:layout_marginRight="16dp"
-          android:hint="(integer)"
-          android:inputType="number"
-          android:gravity="right"
-          android:layout_marginBottom="10dp"
-          android:layout_marginTop="10dp"
-          android:layout_alignParentRight="true"
-          android:layout_alignParentEnd="true"
-          android:id="@+id/etAmmount"
-          android:layout_toRightOf="@+id/tvAmmount"
-          android:layout_toEndOf="@+id/tvAmmount" />
-   </RelativeLayout>
+
 </LinearLayout>
