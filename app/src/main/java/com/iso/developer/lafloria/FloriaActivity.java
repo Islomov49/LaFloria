@@ -1,5 +1,6 @@
 package com.iso.developer.lafloria;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.NavigationView;
@@ -16,22 +17,26 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iso.developer.lafloria.fragments.FlowersFragment;
 import com.iso.developer.lafloria.fragments.MainViewPagerFragment;
 import com.iso.developer.lafloria.fragments.MyMenu;
+import com.iso.developer.lafloria.utils.LFragmentManager;
 import com.mxn.soul.flowingdrawer_core.FlowingView;
 import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 
 public class FloriaActivity extends AppCompatActivity {
 //    NavigationView navigationView;
 //    DrawerLayout drawerLayout;
-    LeftDrawerLayout mLeftDrawerLayout;
+    static public LeftDrawerLayout mLeftDrawerLayout;
+    static public LFragmentManager lFragmentManager;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_floria_modern);
-
+        lFragmentManager =new LFragmentManager(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setTitleTextColor(Color.parseColor("#414141"));
@@ -45,6 +50,8 @@ public class FloriaActivity extends AppCompatActivity {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .add(R.id.continer, new MainViewPagerFragment())
                 .commit();
+
+
 
 //        navigationView = (NavigationView) findViewById(R.id.navigation_view);
 //        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -80,7 +87,7 @@ public class FloriaActivity extends AppCompatActivity {
 
         mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
         FragmentManager fm = getSupportFragmentManager();
-        MyMenu myMenu = (MyMenu) fm.findFragmentById(R.id.id_container_menu);
+         myMenu = (MyMenu) fm.findFragmentById(R.id.id_container_menu);
         FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
         if (myMenu == null) {
             fm.beginTransaction().add(R.id.id_container_menu, myMenu = new MyMenu()).commit();
@@ -95,6 +102,15 @@ public class FloriaActivity extends AppCompatActivity {
             }
         });
     }
+    MyMenu myMenu;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(myMenu!=null)
+            myMenu.onActivResultForDrawerCalls(requestCode,resultCode,data);
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,5 +120,11 @@ public class FloriaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        myMenu.onStopSuniy();
     }
 }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 
 public class MainViewPagerFragment extends Fragment implements ViewPager.OnPageChangeListener {
+    private static final String TAG ="devdebug" ;
     ViewPager viewPager;
     public static int pos = 0;
     private ArrayList<Fragment> list;
@@ -189,17 +190,18 @@ public class MainViewPagerFragment extends Fragment implements ViewPager.OnPageC
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "onTabSelected: ");
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.d(TAG, "onTabUnselected: ");
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Log.d(TAG, "onTabReselected: ");
             }
         });
         tabLayout.setupWithViewPager(viewPager);

@@ -6,23 +6,22 @@ import com.iso.developer.lafloria.utils.TypeOfCategory;
  * Created by developer on 07.10.2016.
  */
 
-public class CardDataCategoryModule {
+public class CardDataCategoryEntity {
     private String nameOfCategory;
     private String linkOfCategoryPhoto;
     private TypeOfCategory typeOfCategory;
 
 
-    private String localCachedPhotoPath;
     private int extraType;
     private String extraString;
     private int priorityCategory;
 
     // temp construct for debug
-    public CardDataCategoryModule(String nameOfCategory) {
+    public CardDataCategoryEntity(String nameOfCategory) {
         this.nameOfCategory = nameOfCategory;
     }
 
-    public CardDataCategoryModule(String nameOfCategory, TypeOfCategory typeOfCategory, String linkOfCategoryPhoto, int priorityCategory) {
+    public CardDataCategoryEntity(String nameOfCategory, TypeOfCategory typeOfCategory, String linkOfCategoryPhoto, int priorityCategory) {
         this.nameOfCategory = nameOfCategory;
         this.typeOfCategory = typeOfCategory;
         this.linkOfCategoryPhoto = linkOfCategoryPhoto;
@@ -79,12 +78,5 @@ public class CardDataCategoryModule {
         this.priorityCategory = priorityCategory;
     }
 
-    public String getLocalCachedPhotoPath() {
-        return localCachedPhotoPath;
-    }
-
-    public void setLocalCachedPhotoPath(String localCachedPhotoPath) {
-        this.localCachedPhotoPath = localCachedPhotoPath;
-    }
 
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.iso.developer.lafloria.R;
 import com.iso.developer.lafloria.adapters.AdapterForFlowerCategory;
-import com.iso.developer.lafloria.datamoduls.CardDataCategoryModule;
+import com.iso.developer.lafloria.datamoduls.CardDataCategoryEntity;
 import com.iso.developer.lafloria.utils.BitmapUtils;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class FlowersFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private List<CardDataCategoryModule> datalist;
+    private List<CardDataCategoryEntity> datalist;
     private AdapterForFlowerCategory adapterForFlower;
     private int overalScroll=0;
     private int intervalforScrolAnimation = 0;
@@ -59,12 +59,12 @@ public class FlowersFragment extends Fragment {
         datalist = new ArrayList<>();
 
         // --- Simulyatsiya--- //
-        datalist.add(new CardDataCategoryModule("All actually"));
-        datalist.add(new CardDataCategoryModule("101 rose"));
-        datalist.add(new CardDataCategoryModule("White rose"));
-        datalist.add(new CardDataCategoryModule("Card bucket"));
-        datalist.add(new CardDataCategoryModule("Red lips"));
-        datalist.add(new CardDataCategoryModule("Wedding bucket"));
+        datalist.add(new CardDataCategoryEntity("All actually"));
+        datalist.add(new CardDataCategoryEntity("101 rose"));
+        datalist.add(new CardDataCategoryEntity("White rose"));
+        datalist.add(new CardDataCategoryEntity("Card bucket"));
+        datalist.add(new CardDataCategoryEntity("Red lips"));
+        datalist.add(new CardDataCategoryEntity("Wedding bucket"));
 
         adapterForFlower = new AdapterForFlowerCategory(datalist,getActivity());
         GridLayoutManager mLayoutManager = new GridLayoutManager(context,2);

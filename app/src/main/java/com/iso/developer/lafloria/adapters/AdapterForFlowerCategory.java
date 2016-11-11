@@ -1,8 +1,6 @@
 package com.iso.developer.lafloria.adapters;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iso.developer.lafloria.FloriaActivity;
 import com.iso.developer.lafloria.R;
-import com.iso.developer.lafloria.datamoduls.CardDataCategoryModule;
-import com.iso.developer.lafloria.fragments.AddingProductFragment;
-import com.iso.developer.lafloria.fragments.MainViewPagerFragment;
+import com.iso.developer.lafloria.datamoduls.CardDataCategoryEntity;
+import com.iso.developer.lafloria.fragments.ProductViewFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static com.iso.developer.lafloria.FloriaActivity.lFragmentManager;
 import static com.iso.developer.lafloria.utils.BitmapUtils.*;
 
 /**
@@ -26,8 +23,9 @@ import static com.iso.developer.lafloria.utils.BitmapUtils.*;
  */
 
 public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlowerCategory.ViewHolder>{
-        List<CardDataCategoryModule> mDataset;
-    Context context;
+        List<CardDataCategoryEntity> mDataset;
+         Context context;
+
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -45,7 +43,7 @@ public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlo
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public AdapterForFlowerCategory(List<CardDataCategoryModule> myDataset, Context A1) {
+        public AdapterForFlowerCategory(List<CardDataCategoryEntity> myDataset, Context A1) {
             mDataset = myDataset;
 
             context=A1;
@@ -69,7 +67,7 @@ public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlo
         public void onBindViewHolder(final ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            final CardDataCategoryModule item=mDataset.get(position);
+            final CardDataCategoryEntity item=mDataset.get(position);
             holder.mTextView.setText(item.getNameOfCategory());
                 Picasso.with(context)
                         .load(R.drawable.temp).resize(dpToPx(200,context),dpToPx(200,context)).centerCrop()
@@ -77,15 +75,11 @@ public class AdapterForFlowerCategory extends RecyclerView.Adapter<AdapterForFlo
             holder.mainView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = ((FloriaActivity)context).getSupportFragmentManager();
-                    fragmentManager
-                            .beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .addToBackStack(null)
-                            .add(R.id.continer, new AddingProductFragment())
-                            .commit();
+                    lFragmentManager.displayFragment(new ProductViewFragment());
                 }
             });
+
+
         }
 
             // Return the size of your dataset (invoked by the layout manager)

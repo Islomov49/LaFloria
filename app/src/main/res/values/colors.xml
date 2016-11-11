@@ -4,9 +4,9 @@
     <color name="greyWhite">#f7f7f7</color>
     <color name="greyNorm">#b1aeb1</color>
     <color name="greyNormSecondary">#b4b4b4</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3d8787</color>
     <color name="glavniy_cherniy">#212121</color>
-    <color name="paint_color">#f4f4f4</color>
+    <color name="paint_color">#ffffff</color>
 
 
 </resources>
