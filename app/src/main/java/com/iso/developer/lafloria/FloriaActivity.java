@@ -19,6 +19,11 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iso.developer.lafloria.fragments.FlowersFragment;
 import com.iso.developer.lafloria.fragments.MainViewPagerFragment;
 import com.iso.developer.lafloria.fragments.MyMenu;
@@ -29,8 +34,19 @@ import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 public class FloriaActivity extends AppCompatActivity {
 //    NavigationView navigationView;
 //    DrawerLayout drawerLayout;
+
+    static
+    {
+        System.loadLibrary("NativeImageProcessor");
+    }
+
+
     static public LeftDrawerLayout mLeftDrawerLayout;
     static public LFragmentManager lFragmentManager;
+
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference rootReference = firebaseDatabase.getReference();
+
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +55,7 @@ public class FloriaActivity extends AppCompatActivity {
         lFragmentManager =new LFragmentManager(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
+        toolbar.setSubtitleTextAppearance(this,R.style.CustomTextAppearance);
         toolbar.setTitleTextColor(Color.parseColor("#414141"));
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
         setSupportActionBar(toolbar);
@@ -51,6 +68,24 @@ public class FloriaActivity extends AppCompatActivity {
                 .add(R.id.continer, new MainViewPagerFragment())
                 .commit();
 
+        toolbar.setSubtitle(R.string.connection);
+        rootReference.child(".info/connected").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean connected = dataSnapshot.getValue(Boolean.class);
+                if(connected){
+                    toolbar.setSubtitle(R.string.online_mode);
+                }
+                else {
+                    toolbar.setSubtitle(R.string.connection_error);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 //        navigationView = (NavigationView) findViewById(R.id.navigation_view);

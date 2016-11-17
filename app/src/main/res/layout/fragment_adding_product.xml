@@ -13,12 +13,25 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical">
-         <ImageView
-             android:id="@+id/imageSelect"
+         <RelativeLayout
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:src="@drawable/ic_add_a_photo_black_48dp"
-             android:adjustViewBounds="true"
+             android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imageSelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_a_photo_black_48dp"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
+                />
+
+         </RelativeLayout>
+         <android.support.v7.widget.RecyclerView
+             android:id="@+id/recyclerPhotoFilters"
+             android:layout_width="match_parent"
+             android:layout_height="80dp"
+             android:visibility="gone"
+             android:background="#c6c6c6"
              />
          <FrameLayout
              android:layout_width="match_parent"

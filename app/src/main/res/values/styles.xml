@@ -14,4 +14,9 @@
         <item name="android:textColor">@color/greyNormSecondary</item>
         <item name="textAllCaps" >false</item>
     </style>
+
+    <style name="CustomTextAppearance" parent="@android:style/TextAppearance">
+            <item name="android:textColor">#bababa</item>
+            <item name="android:textSize">12sp</item>
+    </style>
 </resources>

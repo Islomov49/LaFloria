@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "59294274574-siv1qr6ujiabub320ljoed9cd16vheev.apps.googleusercontent.com",
+          "client_id": "59294274574-st6ue7190fkahgodl439eq3rjj2ufvih.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.iso.developer.lafloria",
-            "certificate_hash": "445091FDF99B03932A0BA1FA6887F325B7F5E541"
+            "certificate_hash": "232B75BDC909CA7BCC1C62D5C30F34325315F9B9"
           }
         },
         {
