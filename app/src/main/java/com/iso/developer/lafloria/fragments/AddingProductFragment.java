@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +59,7 @@ public class AddingProductFragment extends Fragment {
     RadioGroup radioGroup;
     EditText etPhoneNumber;
     SharedPreferences sharedPreferences;
-
+    RelativeLayout rlPriceView;
     FirebaseDatabase database ;
     DatabaseReference rootReference;
 
@@ -90,6 +91,8 @@ public class AddingProductFragment extends Fragment {
         radioGroup = (RadioGroup) view.findViewById(R.id.rgTypes);
         photoFilters = (RecyclerView) view.findViewById(R.id.recyclerPhotoFilters);
         etPhoneNumber = (EditText) view.findViewById(R.id.etPhoneNumber);
+        rlPriceView = (RelativeLayout) view.findViewById(R.id.rlPriceView);
+        rlPriceView.setVisibility(View.GONE);
         //Types of sub
         String[] types = { "Exclusive","101 Rose","Violeta","Card bouqete"};
         ArrayAdapter<String> adapter_FirstType = new ArrayAdapter<String>(getActivity(),
@@ -230,24 +233,27 @@ public class AddingProductFragment extends Fragment {
                         bitmap.getWidth()
                 );
             }
-            Bitmap outputImage = FiltersCollectionByTojiev.getStarLitFilter().processFilter(C);
-            PhotoFiltersListAdapter photoFiltersListAdapter = new PhotoFiltersListAdapter(getContext(), Bitmap.createScaledBitmap(outputImage, 80, 80, true), new PhotoFiltersListAdapter.AddPhotoEffects() {
+            PhotoFiltersListAdapter photoFiltersListAdapter = new PhotoFiltersListAdapter(getContext(), Bitmap.createScaledBitmap(C, 100, 100, true), new PhotoFiltersListAdapter.AddPhotoEffects() {
                 @Override
                 public void effectSelected(int positionEffect) {
                     switch (positionEffect){
                         case 0:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getStarLitFilter().processFilter(C.copy(C.getConfig(), true)));
+
+                            imageProduct.setImageBitmap( C.copy(C.getConfig(), true));
                             break;
                         case 1:
-                            imageProduct.setImageBitmap(  FiltersCollectionByTojiev.getLimeStutterFilter().processFilter(C.copy(C.getConfig(), true)));
+                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getStarLitFilter().processFilter(C.copy(C.getConfig(), true)));
                             break;
                         case 2:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getNightWhisperFilter().processFilter(C.copy(C.getConfig(), true)));
+                            imageProduct.setImageBitmap(  FiltersCollectionByTojiev.getLimeStutterFilter().processFilter(C.copy(C.getConfig(), true)));
                             break;
                         case 3:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getAweStruckVibeFilter().processFilter(C.copy(C.getConfig(), true)));
+                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getNightWhisperFilter().processFilter(C.copy(C.getConfig(), true)));
                             break;
                         case 4:
+                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getAweStruckVibeFilter().processFilter(C.copy(C.getConfig(), true)));
+                            break;
+                        case 5:
                             imageProduct.setImageBitmap( FiltersCollectionByTojiev.getBlueMessFilter().processFilter(C.copy(C.getConfig(), true)));
                             break;
                         default:
@@ -260,7 +266,8 @@ public class AddingProductFragment extends Fragment {
             photoFilters.setLayoutManager(layoutManager);
             photoFilters.setAdapter(photoFiltersListAdapter);
             photoFilters.setVisibility(View.VISIBLE);
-            imageProduct.setImageBitmap(outputImage);
+            imageProduct.setImageBitmap(C);
+            rlPriceView.setVisibility(View.VISIBLE);
 
         }
     }

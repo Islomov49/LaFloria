@@ -24,14 +24,50 @@
                 android:adjustViewBounds="true"
                 android:layout_centerInParent="true"
                 />
+            <RelativeLayout
+                android:id="@+id/rlPriceView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageSelect"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/gradient_price"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingLeft="100dp"
+                android:layout_alignParentEnd="true">
+               <TextView
+                   android:id="@+id/priceProduct"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="300 000 uzs"
+                   android:textStyle="bold"
+                   android:textSize="16dp"
+                   android:textColor="@color/pureWhite"
+                   android:layout_marginRight="16dp"
 
+                   />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/priceProduct"
+                   android:layout_alignRight="@+id/priceProduct"
+                   android:text="La Floria"
+                   android:textSize="14dp"
+                   android:textColor="@color/pureWhite"
+                   android:alpha="0.7"/>
+            </RelativeLayout>
          </RelativeLayout>
+
          <android.support.v7.widget.RecyclerView
              android:id="@+id/recyclerPhotoFilters"
              android:layout_width="match_parent"
-             android:layout_height="80dp"
+             android:layout_height="130dp"
+             android:paddingTop="5dp"
+             android:background="#fafafa"
+             android:paddingLeft="5dp"
+             android:clipToPadding="false"
              android:visibility="gone"
-             android:background="#c6c6c6"
              />
          <FrameLayout
              android:layout_width="match_parent"

@@ -7,6 +7,6 @@
     <color name="colorAccent">#3d8787</color>
     <color name="glavniy_cherniy">#212121</color>
     <color name="paint_color">#ffffff</color>
-
+    <color name="secondary_color">#9b9b9b</color>
 
 </resources>
