@@ -34,28 +34,37 @@
                 android:layout_alignParentRight="true"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
+                android:gravity="right"
                 android:paddingLeft="100dp"
-                android:layout_alignParentEnd="true">
-               <TextView
-                   android:id="@+id/priceProduct"
+                android:layout_alignParentEnd="true"
+                >
+               <LinearLayout
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="300 000 uzs"
-                   android:textStyle="bold"
-                   android:textSize="16dp"
-                   android:textColor="@color/pureWhite"
-                   android:layout_marginRight="16dp"
+                   android:orientation="vertical"
+                   android:gravity="right">
+                  <TextView
+                      android:id="@+id/priceProduct"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="0 uzs"
+                      android:layout_marginRight="16dp"
+                      android:textStyle="bold"
+                      android:textSize="16dp"
+                      android:textColor="@color/pureWhite"
 
-                   />
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_below="@+id/priceProduct"
-                   android:layout_alignRight="@+id/priceProduct"
-                   android:text="La Floria"
-                   android:textSize="14dp"
-                   android:textColor="@color/pureWhite"
-                   android:alpha="0.7"/>
+                      />
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="La Floria"
+                      android:textSize="14dp"
+                      android:layout_marginRight="16dp"
+                      android:textColor="@color/pureWhite"
+                      android:alpha="0.7"
+                      android:id="@+id/textView" />
+               </LinearLayout>
+
             </RelativeLayout>
          </RelativeLayout>
 
@@ -73,15 +82,17 @@
              android:layout_width="match_parent"
              android:layout_height="2px"
              android:background="#ececec"
-             android:layout_marginBottom="10dp"
+
              />
          <RadioGroup
              android:id="@+id/rgTypes"
+            android:paddingTop="10dp"
+             android:paddingBottom="10dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginTop="5dp"
              android:checkedButton="@+id/rbBouqete"
              android:orientation="horizontal">
+
             <RadioButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -90,6 +101,7 @@
                 android:text="@string/bouqete"
                 android:id="@+id/rbBouqete"
                 />
+
             <RadioButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -104,51 +116,58 @@
                 android:layout_marginRight="16dp"
                 android:id="@+id/rbService"/>
          </RadioGroup>
+
          <FrameLayout
              android:layout_width="match_parent"
              android:layout_height="2px"
 
-             android:layout_marginTop="10dp" android:background="#ececec"
+            android:background="#ececec"
              />
+
+
          <RelativeLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginTop="10dp"
+             android:layout_marginTop="16dp"
              >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name_of_product"
                 android:textSize="16dp"
                 android:textColor="@color/glavniy_cherniy"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="17dp"
                 android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/etNameProduct"
-                android:layout_alignTop="@+id/etNameProduct"
-                android:id="@+id/tvproductName" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/edit_text_shape"
-                android:hint="(length 15symbols)"
-                android:gravity="right"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/etNameProduct"
-                android:layout_toRightOf="@+id/tvproductName"
-                android:layout_toEndOf="@+id/tvproductName" />
+                android:id="@+id/tvproductName"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="17dp" />
+
          </RelativeLayout>
+         <EditText
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="16dp"
+             android:layout_marginLeft="16dp"
+             android:paddingLeft="7dp"
+             android:paddingRight="7dp"
+             android:paddingTop="5dp"
+             android:maxLength="15"
+             android:paddingBottom="5dp"
+             android:background="@drawable/edit_text_shape"
+             android:hint="(length 15symbols)"
+             android:gravity="left"
+             android:layout_marginBottom="10dp"
+             android:layout_marginTop="5dp"
+             android:id="@+id/etNameProduct"
+             android:textColorHint="#dfdfdf"
+             />
          <RelativeLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
+             android:layout_marginTop="5dp"
              >
             <TextView
                 android:layout_width="wrap_content"
@@ -158,34 +177,35 @@
                 android:textColor="@color/glavniy_cherniy"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/etAmmount"
-                android:layout_alignTop="@+id/etAmmount"
                 android:id="@+id/tvAmmount" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:hint="(integer)"
-                android:inputType="number"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/edit_text_shape"
-                android:gravity="right"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/etAmmount"
-                android:layout_toRightOf="@+id/tvAmmount"
-                android:layout_toEndOf="@+id/tvAmmount" />
+
 
          </RelativeLayout>
+
+         <EditText
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="16dp"
+             android:hint="(integer)"
+             android:inputType="number"
+             android:paddingLeft="7dp"
+             android:paddingRight="7dp"
+             android:paddingTop="5dp"
+             android:paddingBottom="5dp"
+             android:background="@drawable/edit_text_shape"
+             android:gravity="left"
+             android:layout_marginLeft="16dp"
+             android:layout_marginBottom="10dp"
+             android:layout_marginTop="5dp"
+             android:id="@+id/etAmmount"
+             android:textColorHint="#dfdfdf"
+
+             />
+
          <RelativeLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
+             android:layout_marginTop="5dp"
              >
             <TextView
                 android:layout_width="wrap_content"
@@ -195,36 +215,74 @@
                 android:textColor="@color/glavniy_cherniy"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/tpTimerPickerDeleivry"
-                android:layout_alignTop="@+id/tpTimerPickerDeleivry"
                 android:id="@+id/tvTimePick" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:hint="(hh:mm)"
-                android:focusableInTouchMode="false"
-                android:inputType="number"
-                android:gravity="right"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/edit_text_shape"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/tpTimerPickerDeleivry"
-                android:layout_toRightOf="@+id/tvTimePick"
-                android:layout_toEndOf="@+id/tvTimePick" />
+
 
          </RelativeLayout>
+         <EditText
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="16dp"
+             android:hint="(hh:mm)"
+             android:layout_marginTop="5dp"
+             android:inputType="time"
+             android:gravity="left"
+             android:paddingLeft="7dp"
+             android:paddingRight="7dp"
+             android:paddingTop="5dp"
+             android:paddingBottom="5dp"
+             android:background="@drawable/edit_text_shape"
+             android:layout_marginLeft="16dp"
+             android:id="@+id/tpTimerPickerDeleivry"
+             android:textColorHint="#dfdfdf"
+
+             />
+
          <RelativeLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
+             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_number"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp"
+                android:textColor="@color/glavniy_cherniy"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:id="@+id/tvTelNomer" />
+
+         </RelativeLayout>
+         <EditText
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="16dp"
+             android:inputType="phone"
+             android:gravity="left"
+
+             android:textColorHint="#dfdfdf"
+             android:hint="@string/seler_number"
+             android:layout_marginBottom="20dp"
+             android:layout_marginTop="5dp"
+             android:id="@+id/etPhoneNumber"
+             android:paddingLeft="7dp"
+             android:paddingRight="7dp"
+             android:paddingTop="5dp"
+             android:paddingBottom="5dp"
+             android:background="@drawable/edit_text_shape"
+             android:layout_marginLeft="16dp"
+             />
+         <FrameLayout
+             android:layout_width="match_parent"
+             android:layout_height="2px"
+             android:background="#ececec"
              android:layout_marginBottom="10dp"
+             />
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="15dp"
              >
             <TextView
                 android:layout_width="wrap_content"
@@ -244,60 +302,18 @@
                 android:layout_marginRight="16dp"
 
                 android:gravity="right"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/spTypeOfAdding"
                 />
          </RelativeLayout>
-         <FrameLayout
-             android:layout_width="match_parent"
-             android:layout_height="2px"
-             android:background="#ececec"
-             android:layout_marginBottom="10dp"
-             />
-         <RelativeLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/phone_number"
-                android:textSize="16dp"
-                android:textColor="@color/glavniy_cherniy"
-                android:layout_marginLeft="16dp"
-                android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/etPhoneNumber"
-                android:layout_alignTop="@+id/etPhoneNumber"
-                android:id="@+id/tvTelNomer" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:inputType="phone"
-                android:gravity="right"
-                android:hint="@string/seler_number"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/etPhoneNumber"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/edit_text_shape"
-                android:layout_marginLeft="16dp"
-                android:layout_toRightOf="@+id/tvTelNomer"
-                android:layout_toEndOf="@+id/tvTelNomer" />
-         </RelativeLayout>
+
          <TextView
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:textSize="16dp"
-             android:text="Info"
+             android:text="Info:"
              android:layout_marginBottom="5dp"
              android:textColor="@color/glavniy_cherniy"
              android:layout_marginLeft="16dp"
@@ -308,6 +324,7 @@
              android:background="@drawable/edit_text_shape"
              android:gravity="start"
              android:padding="5dp"
+             android:maxLength="500"
              android:layout_marginLeft="16dp"
              android:layout_marginRight="16dp"
              android:layout_marginTop="2dp"

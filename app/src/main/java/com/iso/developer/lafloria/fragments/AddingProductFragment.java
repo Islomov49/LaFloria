@@ -21,6 +21,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,9 +41,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.iso.developer.lafloria.R;
 import com.iso.developer.lafloria.adapters.PhotoFiltersListAdapter;
+import com.iso.developer.lafloria.utils.CalculateUtills;
 import com.iso.developer.lafloria.utils.ConstantsFl;
+import com.iso.developer.lafloria.utils.DataTimeUtills;
 import com.iso.developer.lafloria.utils.LinearManagerWithOutEx;
 import com.iso.developer.lafloria.utils.FiltersCollectionByTojiev;
+import com.iso.developer.lafloria.utils.PhoneUtills;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,6 +69,9 @@ public class AddingProductFragment extends Fragment {
     FirebaseDatabase database ;
     DatabaseReference rootReference;
 
+    EditText etNameOfProduct,etAmount,etTimeOfDelivery,etInfoProduct;
+    TextView priceProduct;
+    TextView nameProductView;
     FirebaseStorage storage ;
     StorageReference bucketReference ;
     RecyclerView photoFilters;
@@ -90,9 +99,75 @@ public class AddingProductFragment extends Fragment {
         spTypeOfAdding = (Spinner) view.findViewById(R.id.spTypeOfAdding);
         radioGroup = (RadioGroup) view.findViewById(R.id.rgTypes);
         photoFilters = (RecyclerView) view.findViewById(R.id.recyclerPhotoFilters);
-        etPhoneNumber = (EditText) view.findViewById(R.id.etPhoneNumber);
         rlPriceView = (RelativeLayout) view.findViewById(R.id.rlPriceView);
+
+        etNameOfProduct =(EditText) view.findViewById(R.id.etNameProduct);
+        etAmount =(EditText) view.findViewById(R.id.etAmmount);
+        etTimeOfDelivery =(EditText) view.findViewById(R.id.tpTimerPickerDeleivry);
+        etPhoneNumber = (EditText) view.findViewById(R.id.etPhoneNumber);
+        etInfoProduct = (EditText) view.findViewById(R.id.etInfoProduct);
+        priceProduct = (TextView) view.findViewById(R.id.priceProduct);
+        nameProductView = (TextView) view.findViewById(R.id.textView);
+
         rlPriceView.setVisibility(View.GONE);
+
+        //textWatcher for ammount
+        etAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text =etAmount.getText().toString();
+
+                if(text.length() == 0){
+                    priceProduct.setText("0 "+getResources().getString(R.string.valyuta));
+
+                }
+                else {
+
+                    priceProduct.setText(CalculateUtills.ammountWithProbels(text)+" "+getResources().getString(R.string.valyuta));
+
+                }
+            }
+        });
+        etNameOfProduct.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text =etNameOfProduct.getText().toString();
+
+                if(text.length() == 0){
+                    nameProductView.setText(getResources().getString(R.string.app_name));
+
+                }
+                else {
+
+                    nameProductView.setText(text);
+
+                }
+            }
+        });
+
+
+
+
         //Types of sub
         String[] types = { "Exclusive","101 Rose","Violeta","Card bouqete"};
         ArrayAdapter<String> adapter_FirstType = new ArrayAdapter<String>(getActivity(),
@@ -175,6 +250,26 @@ public class AddingProductFragment extends Fragment {
                 if(etPhoneNumber.getText().toString().length()!=0)
                sharedPreferences.edit().putString(ConstantsFl.ADMIN_PHONE_NUMBER,etPhoneNumber.getText().toString().replace(',','.')).commit();
 
+
+                long timeInterval = DataTimeUtills.isItCorrectTimeHHMM(etTimeOfDelivery.getText().toString());
+                if(timeInterval ==-1){
+                    etTimeOfDelivery.setError(getString(R.string.format_error));
+              //      return;
+                }
+                else {
+                    Log.d("texttttt", "onClick: " + timeInterval);
+                }
+
+
+                String phoneNumbe = etPhoneNumber.getText().toString();
+                if(!PhoneUtills.isCorrectPhoneFormat(phoneNumbe,PhoneUtills.UZB))
+                {
+                    etPhoneNumber.setError(getString(R.string.phone_format_error));
+                    return;
+                }
+                else {
+                    Log.d("texttttt", "onClick: " + phoneNumbe);
+                }
                 rootReference.push().setValue((new Random(150000l)).nextInt());
 
             }
