@@ -13,7 +13,7 @@ public class PhoneUtills {
             /*0-UZB*/ "^([+]?)(998[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]|[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]|[0-9][0-9][0-9][0-9][0-9][0-9][0-9])$"
     };
     public static boolean isCorrectPhoneFormat(String phoneNumber,int COUNTRY){
-        Pattern pattern = Pattern.compile(PHONE_FORMAT[0]);
+        Pattern pattern = Pattern.compile(PHONE_FORMAT[COUNTRY]);
         Matcher matcher= pattern.matcher(phoneNumber);
         if(matcher.matches()){
             return true;

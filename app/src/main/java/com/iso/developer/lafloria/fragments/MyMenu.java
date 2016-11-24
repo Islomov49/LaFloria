@@ -46,11 +46,11 @@ public class MyMenu extends MenuFragment {
     private static final String TAG = "devdebug";
     LinearLayout adminMode,products,orders;
     SignInGoogleMoneyHold signInGoogleMoneyHold;
-    CircleImageView circleImageView;
+    static  CircleImageView circleImageView;
     SharedPreferences spref;
     Context context;
-    TextView accountName,userEmail;
-    DownloadImageTask imagetask;
+    static  TextView accountName,userEmail;
+    static DownloadImageTask imagetask;
     boolean downloadnycCanRest = true;
     Uri imageUri;
     @Override
@@ -66,6 +66,7 @@ public class MyMenu extends MenuFragment {
         orders = (LinearLayout) view.findViewById(R.id.myOrders);
         accountName = (TextView) view.findViewById(R.id.nameAccount);
         userEmail = (TextView) view.findViewById(R.id.emailAdress);
+        imagetask = new DownloadImageTask(circleImageView);
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +186,7 @@ public class MyMenu extends MenuFragment {
            if(signInGoogleMoneyHold!=null)
             signInGoogleMoneyHold.regitRequstGet(data);
         }}
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         CircleImageView bmImage;
 
         public DownloadImageTask(CircleImageView bmImage) {

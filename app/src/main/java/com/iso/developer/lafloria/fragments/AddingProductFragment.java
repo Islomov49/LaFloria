@@ -1,6 +1,7 @@
 package com.iso.developer.lafloria.fragments;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +15,9 @@ import android.graphics.Paint;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -27,54 +30,90 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.iso.developer.lafloria.R;
 import com.iso.developer.lafloria.adapters.PhotoFiltersListAdapter;
+import com.iso.developer.lafloria.datamoduls.ProductEntity;
+import com.iso.developer.lafloria.syncbase.SignInGoogleMoneyHold;
 import com.iso.developer.lafloria.utils.CalculateUtills;
 import com.iso.developer.lafloria.utils.ConstantsFl;
+import com.iso.developer.lafloria.utils.CountryUtills;
 import com.iso.developer.lafloria.utils.DataTimeUtills;
 import com.iso.developer.lafloria.utils.LinearManagerWithOutEx;
 import com.iso.developer.lafloria.utils.FiltersCollectionByTojiev;
 import com.iso.developer.lafloria.utils.PhoneUtills;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.TimerTask;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.iso.developer.lafloria.fragments.MyMenu.accountName;
+import static com.iso.developer.lafloria.fragments.MyMenu.circleImageView;
+import static com.iso.developer.lafloria.fragments.MyMenu.imagetask;
+import static com.iso.developer.lafloria.fragments.MyMenu.userEmail;
+import static com.iso.developer.lafloria.utils.ConstantsCategory.*;
 
 public class AddingProductFragment extends Fragment {
     private final int PERMISSION_READ_STORAGE = 6;
     public static int RESULT_LOAD_IMAGE = 1;
+    SignInGoogleMoneyHold signInGoogleMoneyHold;
     ImageView imageProduct;
     String photoPath;
     Spinner spTypeOfAdding;
+    Spinner spCountry;
     RadioGroup radioGroup;
     EditText etPhoneNumber;
     SharedPreferences sharedPreferences;
     RelativeLayout rlPriceView;
     FirebaseDatabase database ;
     DatabaseReference rootReference;
-
+    ScrollView sv;
     EditText etNameOfProduct,etAmount,etTimeOfDelivery,etInfoProduct;
     TextView priceProduct;
     TextView nameProductView;
-    FirebaseStorage storage ;
-    StorageReference bucketReference ;
     RecyclerView photoFilters;
+    RelativeLayout animateFor;
+    boolean pereduprejdeniya_info = false;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference bucketReference = storage.getReferenceFromUrl("gs://lafloria-e0b36.appspot.com");
+    UploadTask uploadTask;
+    StorageMetadata metadata;
+    Bitmap filteredBitmap;
+
+
     public AddingProductFragment() {
         // Required empty public constructor
     }
@@ -97,9 +136,11 @@ public class AddingProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_adding_product, container, false);
         imageProduct = (ImageView) view.findViewById(R.id.imageSelect);
         spTypeOfAdding = (Spinner) view.findViewById(R.id.spTypeOfAdding);
+        spCountry = (Spinner) view.findViewById(R.id.spCountry);
         radioGroup = (RadioGroup) view.findViewById(R.id.rgTypes);
         photoFilters = (RecyclerView) view.findViewById(R.id.recyclerPhotoFilters);
         rlPriceView = (RelativeLayout) view.findViewById(R.id.rlPriceView);
+        animateFor = (RelativeLayout) view.findViewById(R.id.animateFor);
 
         etNameOfProduct =(EditText) view.findViewById(R.id.etNameProduct);
         etAmount =(EditText) view.findViewById(R.id.etAmmount);
@@ -108,6 +149,7 @@ public class AddingProductFragment extends Fragment {
         etInfoProduct = (EditText) view.findViewById(R.id.etInfoProduct);
         priceProduct = (TextView) view.findViewById(R.id.priceProduct);
         nameProductView = (TextView) view.findViewById(R.id.textView);
+        sv = (ScrollView) view.findViewById(R.id.customsv);
 
         rlPriceView.setVisibility(View.GONE);
 
@@ -169,6 +211,12 @@ public class AddingProductFragment extends Fragment {
 
 
         //Types of sub
+        String[] country = CountryUtills.UZB_COUNTRIES;
+        ArrayAdapter<String> adapter_country = new ArrayAdapter<String>(getActivity(),
+                R.layout.spiner_gravity_left, country);
+        spCountry.setAdapter(adapter_country);
+
+
         String[] types = { "Exclusive","101 Rose","Violeta","Card bouqete"};
         ArrayAdapter<String> adapter_FirstType = new ArrayAdapter<String>(getActivity(),
                 R.layout.spiner_gravity_right, types);
@@ -249,28 +297,224 @@ public class AddingProductFragment extends Fragment {
                 //saveForNextTimePhoneNumber
                 if(etPhoneNumber.getText().toString().length()!=0)
                sharedPreferences.edit().putString(ConstantsFl.ADMIN_PHONE_NUMBER,etPhoneNumber.getText().toString().replace(',','.')).commit();
+                boolean ismojno = true;
 
+                if(current_bitmap==null){
+                    Runnable run1 = new TimerTask() {
+                        @Override
+                        public void run() {
+                            animateFor.animate().setDuration(700).translationY(10).setInterpolator(new BounceInterpolator());
+                        }
+                    };
+                    animateFor.animate().setDuration(100).translationY(-25).setInterpolator(new DecelerateInterpolator()).withEndAction(run1);
+                    ismojno = false;
+                }
+                if(!ismojno){
+//                    Toast.makeText(getContext(), getString(R.string.add_photo),Toast.LENGTH_SHORT).show();
+                    sv.scrollTo(0, sv.getTop());
+                    return;
 
+                }
                 long timeInterval = DataTimeUtills.isItCorrectTimeHHMM(etTimeOfDelivery.getText().toString());
                 if(timeInterval ==-1){
-                    etTimeOfDelivery.setError(getString(R.string.format_error));
-              //      return;
-                }
-                else {
-                    Log.d("texttttt", "onClick: " + timeInterval);
-                }
 
+                    etTimeOfDelivery.setError(getString(R.string.format_error));
+                    ismojno = false;
+                }
+                else     etTimeOfDelivery.setError(null);
 
                 String phoneNumbe = etPhoneNumber.getText().toString();
                 if(!PhoneUtills.isCorrectPhoneFormat(phoneNumbe,PhoneUtills.UZB))
                 {
+
                     etPhoneNumber.setError(getString(R.string.phone_format_error));
-                    return;
+                    ismojno = false;
+                }
+                else  etPhoneNumber.setError(null);
+
+
+                if(etNameOfProduct.getText().toString().length()<3 ||etNameOfProduct.getText().toString().length()>15){
+                    etNameOfProduct.setError(getString(R.string.name_product_error));
+                    ismojno = false;
                 }
                 else {
-                    Log.d("texttttt", "onClick: " + phoneNumbe);
+                    etNameOfProduct.setError(null);
                 }
-                rootReference.push().setValue((new Random(150000l)).nextInt());
+
+                double ammount_prodct = -1;
+                if(etAmount.getText().toString().length()<3 || etAmount.getText().toString().length()>15 ){
+                    etAmount.setError(getString(R.string.ammount_format_incorect));
+                    ismojno = false;
+                }
+                else {
+                    try {
+                        ammount_prodct = Double.parseDouble(etAmount.getText().toString().replace(',','.'));
+                        etAmount.setError(null);
+                    }
+                    catch (Exception o){
+                        o.printStackTrace();
+                        etAmount.setError(getString(R.string.ammount_format_incorect));
+                        ismojno = false;
+                    }
+
+                }
+
+                if(!ismojno){
+                    sv.scrollTo(0, (int) (etNameOfProduct.getY()-60));
+                    return;
+
+                }
+
+                if(etInfoProduct.getText().toString().length()==0){
+                    if(pereduprejdeniya_info){
+                        ismojno = true ;
+                    }
+                    else {
+                        Toast.makeText(getContext(), R.string.info_obyasnawka,Toast.LENGTH_LONG).show();
+                        pereduprejdeniya_info = true;
+                        ismojno = false;
+                    }
+                }
+                else if(etInfoProduct.getText().length()<10 || etInfoProduct.getText().length()>500  ){
+                    etInfoProduct.setError(getString(R.string.info_error));
+                    ismojno=false;
+                }
+                else {
+                    etInfoProduct.setError(null);
+                }
+
+
+                if(!ismojno){
+                    return;
+
+                }
+
+
+                String sub_type = spTypeOfAdding.getSelectedItem().toString();
+                Log.d("EEEE", sub_type);
+                    String type_operation="";
+                switch (radioGroup.getCheckedRadioButtonId()){
+                    case R.id.rbBouqete:
+                        type_operation = BOUQETE;
+                        break;
+                    case R.id.rbRomantic:
+                        type_operation = ROMANTIC;
+                        break;
+                    case R.id.rbService:
+                        type_operation = SERVICE;
+                        break;
+                }
+
+                final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                progressDialog.setTitle(getContext().getString(R.string.please_wait));
+                //TODO Go FIREBASE
+                final String photokey = rootReference.push().getKey();
+
+                final ProductEntity product = new ProductEntity(type_operation,sub_type, etNameOfProduct.getText().toString(),
+                        ammount_prodct, spCountry.getSelectedItemPosition(),etInfoProduct.getText().toString(),timeInterval,phoneNumbe ,photokey,"","");
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if(firebaseUser!=null){
+                    progressDialog.show();
+                    final String key = rootReference.child("Products").push().getKey();
+
+                    metadata = new StorageMetadata.Builder()
+                            .setContentType("image/jpeg")
+                            .build();
+
+                    try {
+                        savePhotoToCache(photokey,filteredBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(),"Some Error with photo",Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        return;
+                    }
+
+
+                    ////
+                    Uri file = Uri.fromFile(new File( Environment.getExternalStorageDirectory().getAbsolutePath() +
+                            "/LaFloria/photos/"+photokey+".jpg"));
+                    final Uri file_cache = Uri.fromFile(new File( Environment.getExternalStorageDirectory().getAbsolutePath() +
+                            "/LaFloria/cache/"+photokey+".jpg"));
+
+                    uploadTask=bucketReference.child("ProductsPhoto/"+key).putFile(file,metadata);
+                    uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            Log.d("fbb",progress +"");
+                        }
+                    }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("Upload is paused");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            bucketReference.child("ProductsCache/"+key).putFile(file_cache,metadata).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    product.setPathProductImageOne(photokey);
+                                    Map<String, Object> postValues = product.toMap();
+                                    Map<String, Object> childUpdates = new HashMap<>();
+                                    childUpdates.put("/Products/" + key, postValues);
+                                    childUpdates.put("/UserOrders/" + firebaseUser.getUid() + "/productsList/" + key, true);
+                                    rootReference.updateChildren(childUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            progressDialog.dismiss();
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        }
+                    });
+                    ////
+
+
+
+                }
+                else {
+                    //TODO CHALA
+                    signInGoogleMoneyHold = new SignInGoogleMoneyHold(getActivity(), new SignInGoogleMoneyHold.UpdateSucsess() {
+                        @Override
+                        public void updateToSucsess() {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                accountName.setText(user.getDisplayName());
+                                userEmail.setText(user.getEmail());
+                                try {
+                                    if (user.getPhotoUrl() != null) {
+                                        imagetask.execute(user.getPhotoUrl().toString());
+                                    }
+                                } catch (Exception o) {
+
+                                }}
+
+
+                        }
+
+                        @Override
+                        public void updateToFailed() {
+
+                        }
+                    });
+                    if (getContext().getSharedPreferences("infoFirst", getContext().MODE_PRIVATE).getBoolean("FIRSTSYNC", true)) {
+                        signInGoogleMoneyHold.openDialog();
+                    } else
+                        signInGoogleMoneyHold.regitUser();
+                }
+
+
+
 
             }
         });
@@ -285,7 +529,7 @@ public class AddingProductFragment extends Fragment {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
-    Bitmap C;
+    Bitmap current_bitmap;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -312,7 +556,7 @@ public class AddingProductFragment extends Fragment {
 //                    m, true);
 
             if (bitmap.getWidth() >= bitmap.getHeight()) {
-                C = Bitmap.createBitmap(
+                current_bitmap = Bitmap.createBitmap(
                         bitmap,
                         bitmap.getWidth() / 2 - bitmap.getHeight() / 2,
                         0,
@@ -320,7 +564,7 @@ public class AddingProductFragment extends Fragment {
                         bitmap.getHeight()
                 );
             } else {
-                C = Bitmap.createBitmap(
+                current_bitmap = Bitmap.createBitmap(
                         bitmap,
                         0,
                         bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
@@ -328,31 +572,38 @@ public class AddingProductFragment extends Fragment {
                         bitmap.getWidth()
                 );
             }
-            PhotoFiltersListAdapter photoFiltersListAdapter = new PhotoFiltersListAdapter(getContext(), Bitmap.createScaledBitmap(C, 100, 100, true), new PhotoFiltersListAdapter.AddPhotoEffects() {
+            filteredBitmap = current_bitmap;
+            PhotoFiltersListAdapter photoFiltersListAdapter = new PhotoFiltersListAdapter(getContext(), Bitmap.createScaledBitmap(current_bitmap, 100, 100, true), new PhotoFiltersListAdapter.AddPhotoEffects() {
                 @Override
                 public void effectSelected(int positionEffect) {
                     switch (positionEffect){
                         case 0:
-
-                            imageProduct.setImageBitmap( C.copy(C.getConfig(), true));
+                            filteredBitmap = current_bitmap.copy(current_bitmap.getConfig(), true);
+                            imageProduct.setImageBitmap( filteredBitmap);
                             break;
                         case 1:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getStarLitFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getStarLitFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap(filteredBitmap);
                             break;
                         case 2:
-                            imageProduct.setImageBitmap(  FiltersCollectionByTojiev.getLimeStutterFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getLimeStutterFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap(  filteredBitmap);
                             break;
                         case 3:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getNightWhisperFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getNightWhisperFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap( filteredBitmap);
                             break;
                         case 4:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getAweStruckVibeFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getAweStruckVibeFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap( filteredBitmap);
                             break;
                         case 5:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getBlueMessFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getBlueMessFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap( filteredBitmap);
                             break;
                         default:
-                            imageProduct.setImageBitmap( FiltersCollectionByTojiev.getStarLitFilter().processFilter(C.copy(C.getConfig(), true)));
+                            filteredBitmap = FiltersCollectionByTojiev.getStarLitFilter().processFilter(current_bitmap.copy(current_bitmap.getConfig(), true));
+                            imageProduct.setImageBitmap( filteredBitmap);
                             break;
                     }
                 }
@@ -361,7 +612,7 @@ public class AddingProductFragment extends Fragment {
             photoFilters.setLayoutManager(layoutManager);
             photoFilters.setAdapter(photoFiltersListAdapter);
             photoFilters.setVisibility(View.VISIBLE);
-            imageProduct.setImageBitmap(C);
+            imageProduct.setImageBitmap(current_bitmap);
             rlPriceView.setVisibility(View.VISIBLE);
 
         }
@@ -536,6 +787,31 @@ public class AddingProductFragment extends Fragment {
         super.onDetach();
     }
 
+    public void savePhotoToCache(String name,Bitmap bmp) throws IOException {
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/LaFloria/photos";
+        String file_path_cache = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/LaFloria/cache";
 
+        File dir = new File(file_path);
+        if(!dir.exists())
+            dir.mkdirs();
+        File file = new File(dir, name + ".jpg");
+        FileOutputStream fOut = new FileOutputStream(file);
+
+        bmp.compress(Bitmap.CompressFormat.JPEG,  100, fOut);
+        fOut.flush();
+        fOut.close();
+
+        File dir2 = new File(file_path_cache);
+        if(!dir2.exists())
+            dir2.mkdirs();
+        File file2 = new File(dir2, name + ".jpg");
+        FileOutputStream fOut2 = new FileOutputStream(file2);
+
+        bmp.compress(Bitmap.CompressFormat.JPEG,  30, fOut2);
+        fOut2.flush();
+        fOut2.close();
+    }
 
 }

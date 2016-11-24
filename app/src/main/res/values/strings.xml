@@ -35,4 +35,10 @@
     <string name="connection_error">Connection Error</string>
     <string name="format_error">Format should be hh:mm</string>
     <string name="phone_format_error">Format should be official</string>
+    <string name="name_product_error">Name of product must be greater than 3 smbols and less 15</string>
+    <string name="ammount_format_incorect">Ammount format is invalidate</string>
+    <string name="info_error">Information of product must be greater than 10 symbols and less 500, or just empty</string>
+    <string name="info_obyasnawka">Info will help you for cell product better. If you want without info please tap ADD button one more</string>
+    <string name="add_photo">Add photo your product</string>
+    <string name="location_delivery">Location delivery</string>
 </resources>
